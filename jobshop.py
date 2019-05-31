@@ -1,14 +1,13 @@
 from z3 import *
 import itertools
 
+
 jobs = []
 jobs.append([(0, 3), (1, 2), (2, 2)])
 jobs.append([(2, 2), (0, 2)])
 machines=3
 
-
 makespan = Int('makespan')
-
 
 #  tasks can not overlap on machines:
 def no_overlap_tasks_machine():
@@ -30,7 +29,7 @@ def no_items_overlap (s, lst):
     for pair in itertools.combinations(lst, r = 2):
         no_interval_overlap(s, (pair[0][1], pair[0][2]), (pair[1][1], pair[1][2]))
 
-
+        
 sol = Optimize()
 sol.add(makespan > 0) 
 
@@ -74,7 +73,6 @@ for job in range(len(jobs)):
     jobs_list.append(jobs_list_tmp)
 
 
-
 h = sol.minimize(makespan)
 
 if sol.check() == unsat:
@@ -84,7 +82,6 @@ sol.lower(h)
 m = sol.model()
 
 text_result = []
-
 
 # construct Gantt chart:
 ms_long = m[makespan].as_long()
@@ -101,7 +98,6 @@ for machine in range(machines):
     for i,t in enumerate(st):
         ss = ss+("." if t == None else str(st[i]))
     text_result.append(ss)
-
 
 print ("Machines Used :")
 for m in range(len(text_result)):
