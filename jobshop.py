@@ -11,7 +11,7 @@ makespan = Int('makespan')
 
 #  tasks can not overlap on machines:
 def no_overlap_tasks_machine():
-    for tasks_for_machine in tasks_for_machines:
+    for tasks_for_machine in tasks_machines:
         no_interval_overlap_machine(s, tasks_for_machine)
         
 #  tasks can not overlap in each jobs:
@@ -35,12 +35,13 @@ sol = Optimize()
 sol.add(makespan > 0) 
 
 
-tasks_for_machines = [[] for i in range(machines)]
+tasks_machines = [[] for i in range(machines)]
 
 jobs_list = []
 
 
 for job in range(len(jobs)):
+    
     former_task_end = None
     jobs_list_tmp = []
 
@@ -48,12 +49,15 @@ for job in range(len(jobs)):
         machine = t[0]
         time_used = t[1]
 
-        #variables:
+        #set the variables:
         begin = Int('j_%d_task_%d_%d_begin' % (job, machine, time_used))
         end = Int('j_%d_task_%d_%d_end' % (job, machine, time_used))
+        
+        #check whether it is avaliable to add the tasks
+        if (begin,end) not in tasks_machines[machine]:
+            tasks_machines[machine].append((job,begin,end))
 
-        if (begin,end) not in tasks_for_machines[machine]:
-            tasks_for_machines[machine].append((job,begin,end))
+        #check whether it is avaliable to add the jobs        
         if (begin,end) not in jobs_list_tmp:
             jobs_list_tmp.append((job,begin,end))
 
@@ -88,7 +92,7 @@ result = []
 ms_long = m[makespan].as_long()
 for machine in range(machines):
     st = [None for i in range(ms_long)]
-    for task in tasks_for_machines[machine]:
+    for task in tasks_machines[machine]:
         job = task[0]
         begin = m[task[1]].as_long()
         end = m[task[2]].as_long()
