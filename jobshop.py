@@ -108,5 +108,5 @@ print ("Below is the optimal makespan:")
 for time_unit in range(len(text_result[0])):
     print ("Time Schedule =%3d:        " % (time_unit))
     for m in range(len(text_result)):
-        print (text_result[m][time_unit])
+        print (text_result[m][time_unit], end = "\t")
     print (" ")
