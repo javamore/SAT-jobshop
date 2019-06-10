@@ -1,5 +1,7 @@
 from z3 import *
 import itertools
+import time 
+start = time.time()
 
 jobs = []
 jobs.append([(4,  15),  (5,  31),  (1,  87),  (2,  57),  (0,  77),  (3,  85)])
@@ -120,3 +122,6 @@ for time_unit in range(len(result[0])):
         print (result[m_sol][time_unit], end = "\t")
         print ("")
     print (" ")
+
+elapsed = (time.time() - start)
+print("Time used:",elapsed)
