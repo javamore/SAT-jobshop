@@ -1,0 +1,67 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{authblk}
+\usepackage[utf8]{inputenc}
+\usepackage{siunitx}
+\usepackage{graphicx}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{caption}
+\usepackage{amssymb}
+
+\usepackage{xspace,graphicx,amsmath,amsthm,amssymb,xcolor}
+
+\usepackage{varwidth}
+\newcommand{\fcodebox}[1]{%
+    \framebox{\codebox{#1}}%
+}
+\newcommand{\codebox}[1]{%
+        \begin{varwidth}{\linewidth}%
+        \begin{tabbing}%
+            ~~~\=\quad\=\quad\=\quad\=\quad\=\quad\=\kill
+            #1
+        \end{tabbing}%
+        \end{varwidth}%
+}
+
+
+
+
+
+
+
+
+
+\title{CS 517: A tool for Job Shop Problem \\ Final Report}
+
+\date{Spring 2019}
+\author{Wei-Jen Chen, Weijie Mo}
+
+\makeatletter
+\let\inserttitle\@title
+\let\insertdate\@date
+
+\begin{document}
+
+\begin{center}
+  \LARGE{\inserttitle}
+
+  \Large{\@author}
+\end{center}
+
+\hrulefill
+
+\input{abstract.tex}
+\input{preface.tex}
+\input{background.tex}
+\input{reduction.tex}
+\newpage
+\input{code.tex}
+\input{evaluation.tex}
+\input{conclusion.tex}
+\input{reference.tex}
+
+\end{document}

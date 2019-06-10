@@ -1,0 +1,93 @@
+\section*{Code}
+
+We will show our partial code in the following table. For completed code, please check our github at the end of this chapter. \\
+
+\fcodebox{
+
+
+\#  items can not overlap: \\
+def no\_items\_overlap (s, lst): \\
+\>\>for pair in itertools.combinations(lst, r = 2): \\
+\>\>\>\>no\_interval\_overlap(s, (pair[0][1], pair[0][2]), (pair[1][1], pair[1][2])) \\
+
+\#  intervals can not overlap: \\
+def no\_interval\_overlap (s, i1, i2): \\
+\>\>(i1\_begin, i1\_end) = i1 \\
+\>\>(i2\_begin, i2\_end) = i2 \\
+\>\>s.add(Or(i1\_begin $\geq$ i2\_end, i1\_end <= i2\_begin)) \\
+    
+for job in range(len(jobs)): \\
+\>\>former\_task\_end = None \\
+\>\>jobs\_list\_tmp = [] \\
+ 
+\>\>for t in jobs[job]: \\
+\>\>\>\>machine = t[0] \\
+\>\>\>\>time\_used = t[1] \\
+\#set  variables: \\
+\>\>begin = Int('j\_\%d\_task\_\%d\_\%d\_begin' \% (job, machine, time\_used)) \\
+\>\>end = Int('j\_\%d\_task\_\%d\_\%d\_end' \% (job, machine, time\_used))\\
+        
+\#check whether it is avaliable to add tasks\\
+\>\>if (begin,end) not in tasks\_machines[machine]:\\
+\>\>\>\>tasks\_machines[machine].append((job,begin,end))\\
+
+\#check whether it is avaliable to add jobs        \\
+\>\>if (begin,end) not in jobs\_list\_tmp:\\
+\>\>\>\>jobs\_list\_tmp.append((job,begin,end)) \\
+
+\# task start from time $\geq$ 0\\
+\>\>sol.add(begin $\geq$ 0)\\
+
+\# no task end after makespan:\\
+\>\>sol.add(end $\leq$ makespan)\\
+         
+        
+
+\# end time is fixed with begin time:\\
+\>\>sol.add(end == begin+time\_used)\\
+
+
+\# no task begin before the last task end:\\
+\>\>if former\_task\_end != None:\\
+\>\>\>\>sol.add(begin $\geq$ former\_task\_end)\\
+\>\>\>\>former\_task\_end = end\\
+\>\>\>\>jobs\_list.append(jobs\_list\_tmp)\\
+
+}
+\newpage
+\fcodebox{
+\# no tasks overlap on machines:\\
+for tasks\_for\_machine in tasks\_machines:\\
+\>\>no\_items\_overlap(sol, tasks\_for\_machine)\\
+
+\# no tasks overlap on each jobs:\\
+for jobs\_list\_tmp in jobs\_list:\\
+\>\>no\_items\_overlap(sol, jobs\_list\_tmp)\\
+
+
+\>\>min = sol.minimize(makespan)\\
+
+\#unknown = CheckSatResult(Z3\_L\_UNDEF)\\
+
+
+if sol.check() == unknown:\\
+\>\>print ("the result is unknown")\\
+\>\>exit(0)\\
+
+\#sat = CheckSatResult(Z3\_L\_TRUE)\\
+\#unsat = CheckSatResult(Z3\_L\_FALSE)\\
+elif sol.check() == unsat:\\
+\>\>print ("the result is unsat")\\
+\>\>exit(0)\\
+
+\#sol.lower is to check&ensure result returned by maximize/minimize \\
+\>\>sol.lower(min)\\
+
+\#m\_sol is to return optimized machine using schedule\\
+\>\>m\_sol = sol.model()\\
+
+
+    
+    }
+
+Github: https://github.com/javamore/SAT-jobshop/blob/master/jobshop.py
